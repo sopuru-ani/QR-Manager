@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+  preferredstrategy: "pseudoelements";
+}
+/* ::-webkit-scrollbar-button {
+  display: none !important;
+  
+} */
+
+@theme {
+  /* --color-lime: #c6ff00;
+  --color-lime-dark: #87cc00;
+  --color-lime-light: #e3ff66; */
+  --color-lime: #86b503;
+  --color-lime-dark: #608901;
+  --color-lime-light: #a7d502;
+
+  --color-gray-light: #f3f3f3;
+  --color-gray: #d4d4d4;
+  --color-gray-dark: #a3a3a3;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Text */
+  --text-primary: var(--color-black);
+  --text-secondary: var(--color-gray-dark);
+  --text-inverse: var(--color-white);
+}
+
+:root {
+  /* brand colors */
+  /* --color-lime: #c6ff00;
+  --color-lime-dark: #87cc00;
+  --color-lime-light: #e3ff66; */
+  --color-lime: #86b503;
+  --color-lime-dark: #608901;
+  --color-lime-light: #a7d502;
+
+  /* neutrals */
+  --color-gray-light: #f3f3f3;
+  --color-gray: #d4d4d4;
+  --color-gray-dark: #a3a3a3;
+
+  /* white + black */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* foreground text colors */
+  --text-primary: var(--color-black);
+  --text-secondary: var(--color-gray-dark);
+  --text-inverse: var(--color-white);
+}
+
+a {
+  text-decoration: none !important;
+}
