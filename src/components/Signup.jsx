@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 
 import { useMainContext } from "../useMainContext.jsx";
 
 function Signup() {
   const { expressRoute } = useMainContext();
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,6 +40,9 @@ function Signup() {
         setSignup(true);
         setSignupMsg("Signup successful! Redirecting to dashboard...");
         setError(false);
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
       } else {
         // Handle login failure (e.g., show error message)
         console.log("Login failed");
