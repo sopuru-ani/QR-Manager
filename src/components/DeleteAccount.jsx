@@ -76,7 +76,7 @@ function DeleteAccount({ open, onClose }) {
             <p className="font-medium">{errorMsg}</p>
           </div>
         )}
-        {!success && (
+        {success && (
           <div className="bg-green-100 border-l-4 border-green-600 text-green-700 p-3 rounded mb-2 animate-fade-in">
             <p className="font-medium">{successMsg}</p>
           </div>
