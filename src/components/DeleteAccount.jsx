@@ -31,7 +31,9 @@ function DeleteAccount({ open, onClose }) {
       if (response.ok) {
         // navigate("/");
         setSuccess(true);
-        setSuccessMsg("Login successful! Redirecting to homepage...");
+        setSuccessMsg(
+          "Account deleted successfully! Redirecting to homepage..."
+        );
         setError(false);
         setTimeout(() => {
           navigate("/");
