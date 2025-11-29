@@ -120,6 +120,7 @@ function DeleteAccount({ open, onClose }) {
                 ? "bg-red-300 cursor-not-allowed"
                 : "bg-red-500 hover:bg-red-600"
             }`}
+            onClick={deleteAccount}
           >
             Delete
           </button>
