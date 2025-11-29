@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { MainContext } from "./MainContext";
 
 function MainProvider({ children }) {
-  const expressRoute = "https://qr-manager-server-gec1.onrender.com/";
+  // const expressRoute = "https://qr-manager-server-gec1.onrender.com/";
+  const expressRoute = "http://localhost:3000/";
   const [isLight, setIsLight] = useState(true);
   function isValidUrl(url) {
     try {

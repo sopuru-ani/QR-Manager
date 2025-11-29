@@ -8,6 +8,8 @@ import {
   FiX,
   FiCheck,
 } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+
 import { useMainContext } from "../useMainContext.jsx";
 
 function QRDetailModal({
@@ -20,6 +22,7 @@ function QRDetailModal({
   setEditMode,
 }) {
   const { expressRoute } = useMainContext();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ title: "", url: "" });
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -38,6 +41,7 @@ function QRDetailModal({
     if (response.status === 401) {
       console.log(resData.msg || "Unauthorized behavior");
       setFormData({ title: qr.title || "", url: qr.url || "" });
+      navigate("/login");
     }
     if (response.ok) {
       console.log(resData.msg || "QR updated successfully");
@@ -71,6 +75,7 @@ function QRDetailModal({
       console.log(resData.msg || "Unauthorized behavior");
       setFormData({ title: qr.title || "", url: qr.url || "" });
       setSuccess(false);
+      navigate("/login");
     }
     if (response.ok) {
       console.log(resData.msg || "QR deleted successfully");

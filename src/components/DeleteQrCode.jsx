@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useMainContext } from "../useMainContext";
 function DeleteQrCode({ render, rerender, open, qr, onClose }) {
   if (!open || !qr) return null;
+  const navigate = useNavigate();
   const { expressRoute } = useMainContext();
   async function handleDelete(id) {
     const response = await fetch(`${expressRoute}api/qrcode/${id}`, {
@@ -10,7 +13,8 @@ function DeleteQrCode({ render, rerender, open, qr, onClose }) {
     });
     const data = await response.json();
     if (response.status === 401) {
-      console.log(data.msg || "unauthorized entry");
+      // console.log(data.msg || "unauthorized entry");
+      navigate("/login");
     }
     if (response.ok) {
       console.log(data.msg || "successfully deleted");
@@ -24,7 +28,7 @@ function DeleteQrCode({ render, rerender, open, qr, onClose }) {
 
     setTimeout(() => {
       onClose();
-    }, 2000);
+    }, 0);
   }
 
   return (

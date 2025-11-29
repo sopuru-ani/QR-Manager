@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiClock, FiLink, FiBarChart2, FiActivity } from "react-icons/fi";
+import { MdDownload } from "react-icons/md";
 
 import { useMainContext } from "../useMainContext";
 import Loading from "./Loading.jsx";
 import QRDetailModal from "./QRDetailModal.jsx";
 import DeleteQrCode from "./DeleteQrCode.jsx";
 import ScanActivity from "./ScanActivity.jsx";
+import EmptyQRState from "./EmptyQRState.jsx";
 
 function Dashboard() {
   const { expressRoute } = useMainContext();
+  const navigate = useNavigate();
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -31,12 +35,15 @@ function Dashboard() {
         setLoading(false);
       }
       if (response.status === 401) {
-        console.log("Unauthorized");
+        navigate("/login");
+        // console.log("Unauthorized");
       }
       if (!response.ok) {
         console.log(
           data.msg || "Failed to fetch overview data. Please try again."
         );
+        setLoading(false);
+        // navigate("/login");
       }
     }
     fetchDashboardData();
@@ -48,6 +55,8 @@ function Dashboard() {
       <title>Overview</title>
       {loading ? (
         <Loading text="loading overview..." />
+      ) : !fetchedData.recentQrCodes || fetchedData.recentQrCodes === 0 ? (
+        <EmptyQRState />
       ) : (
         <div className="mt-2 mb p-6 h-[calc(100dvh-88px)] overflow-y-auto scrollbar-thin scrollbar-thumb-lime scrollbar-track-gray-300 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-thumb-lime-dark">
           {/* Top stats cards */}
@@ -110,8 +119,15 @@ function Dashboard() {
               {fetchedData.recentQrCodes.map((i) => (
                 <div
                   key={i._id}
-                  className="bg-gray-100 rounded-lg p-4 flex flex-col items-center gap-3"
+                  className="relative bg-gray-100 rounded-lg p-4 flex flex-col items-center gap-3"
                 >
+                  <a
+                    className="absolute top-4 left-4 flex items-center gap-2 p-2 bg-gray-300 hover:bg-gray-400 text-white rounded"
+                    download={`${i.title}.png`}
+                    href={i.qrDataUrl}
+                  >
+                    <MdDownload size={20} />
+                  </a>
                   <img
                     src={i.qrDataUrl}
                     alt={`QR Code for ${i.title}`}
