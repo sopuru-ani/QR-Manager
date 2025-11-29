@@ -20,6 +20,8 @@ function DeleteAccount({ open, onClose }) {
       const response = await fetch(`${expressRoute}account`, {
         method: "DELETE",
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ emailDel: email, textDel: confirmText }),
       });
       const data = await response.json();
       if (response.status === 401) {
@@ -29,7 +31,7 @@ function DeleteAccount({ open, onClose }) {
       if (response.ok) {
         // navigate("/");
         setSuccess(true);
-        setSuccessMsg("Login successful! Redirecting to dashboard...");
+        setSuccessMsg("Login successful! Redirecting to homepage...");
         setError(false);
         setTimeout(() => {
           navigate("/");
