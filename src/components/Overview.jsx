@@ -17,6 +17,7 @@ function Overview() {
   const { expressRoute, isLight, setIsLight } = useMainContext();
   const location = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [showProfile, setShowProfile] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);

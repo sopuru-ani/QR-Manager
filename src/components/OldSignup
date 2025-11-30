@@ -1,0 +1,203 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+
+import { useMainContext } from "../useMainContext.jsx";
+
+function Signup() {
+    const { expressRoute } = useMainContext();
+    const navigate = useNavigate();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [signup, setSignup] = useState(false);
+    const [signupMsg, setSignupMsg] = useState("");
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
+    async function signupAuthentication(event) {
+        event.preventDefault();
+        try {
+            const response = await fetch(`${expressRoute}signup`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password,
+                    confirmPassword: confirmPassword,
+                }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                // Signup successful
+                setSignup(true);
+                setSignupMsg("Signup successful! Redirecting to dashboard...");
+                setError(false);
+                setTimeout(() => {
+                    navigate("/dashboard");
+                }, 1500);
+            } else {
+                // Handle login failure (e.g., show error message)
+                console.log("Login failed");
+                setError(true);
+                setErrorMsg(data.msg || "Login failed. Please try again.");
+            }
+        } catch (error) {
+            setError(true);
+            setErrorMsg("Server error. Please try again later.");
+        }
+        // Add signup logic here
+    }
+    return (
+        <>
+            <title>Sign Up</title>
+            <div className="min-h-screen flex items-center justify-center bg-amber-50 p-4">
+                <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
+                    <h2 className="text-3xl font-bold text-lime mb-4 text-center">
+                        Create Account
+                    </h2>
+                    <p className="text-gray-dark mb-6 text-center">
+                        Sign up to start generating dynamic QR codes
+                    </p>
+
+                    <form className="space-y-4" onSubmit={signupAuthentication}>
+                        {/* {error or success box below} */}
+                        {error && (
+                            <div className="bg-red-100 border-l-4 border-red-600 text-red-700 p-3 rounded mb-2 animate-fade-in">
+                                <p className="font-medium">{errorMsg}</p>
+                            </div>
+                        )}
+                        {signup && (
+                            <div className="bg-green-100 border-l-4 border-green-600 text-green-700 p-3 rounded mb-2 animate-fade-in">
+                                <p className="font-medium">{signupMsg}</p>
+                            </div>
+                        )}
+                        <div className="flex space-x-4">
+                            <div className="flex-1 group">
+                                <label
+                                    htmlFor="firstName"
+                                    className="block text-gray-dark mb-1 group-focus-within:text-lime"
+                                >
+                                    First Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="firstName"
+                                    placeholder="First Name"
+                                    className="w-full border border-gray rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-lime"
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="flex-1 group">
+                                <label
+                                    htmlFor="lastName"
+                                    className="block text-gray-dark mb-1 group-focus-within:text-lime"
+                                >
+                                    Last Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="lastName"
+                                    placeholder="Last Name"
+                                    className="w-full border border-gray rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-lime"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="group">
+                            <label
+                                htmlFor="email"
+                                className="block text-gray-dark mb-1 group-focus-within:text-lime"
+                            >
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="you@example.com"
+                                className="w-full border border-gray rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-lime"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="group">
+                            <label
+                                htmlFor="password"
+                                className="block text-gray-dark mb-1 group-focus-within:text-lime"
+                            >
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="********"
+                                className="w-full border border-gray rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-lime"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="group">
+                            <label
+                                htmlFor="confirmPassword"
+                                className="block text-gray-dark mb-1 group-focus-within:text-lime"
+                            >
+                                Confirm Password
+                            </label>
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                placeholder="********"
+                                className="w-full border border-gray rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-lime"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-lime text-white py-2 rounded-md hover:bg-lime-dark transition cursor-pointer"
+                        >
+                            Sign Up
+                        </button>
+                    </form>
+
+                    <div className="flex items-center my-4">
+                        <hr className="flex-1 border-gray" />
+                        <span className="mx-2 text-gray-dark pl-4 pr-4">or</span>
+                        <hr className="flex-1 border-gray" />
+                    </div>
+
+                    <button className="w-full flex items-center justify-center border border-gray rounded-md py-2 hover:bg-gray-100 transition cursor-pointer">
+                        <FcGoogle className="mr-2" size={20} />
+                        Continue with Google
+                    </button>
+
+                    <p className="mt-4 text-center text-gray-dark text-sm">
+                        Already have an account?{" "}
+                        <Link
+                            to="/login"
+                            className="text-lime hover:underline cursor-pointer"
+                        >
+                            Login
+                        </Link>
+                    </p>
+                </div>
+            </div>
+        </>
+    );
+}
+
+export default Signup;
