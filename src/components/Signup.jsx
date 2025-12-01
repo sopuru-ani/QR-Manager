@@ -277,10 +277,14 @@ function SignupFlow() {
             </div>
             <div className="flex space-x-4 mb-4">
               <div className="flex-1 group">
-                <label className="block text-gray-dark mb-1 group-focus-within:text-lime">
+                <label
+                  htmlFor="firstName"
+                  className="block text-gray-dark mb-1 group-focus-within:text-lime"
+                >
                   First Name
                 </label>
                 <input
+                  id="firstName"
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
@@ -288,10 +292,14 @@ function SignupFlow() {
                 />
               </div>
               <div className="flex-1 group">
-                <label className="block text-gray-dark mb-1 group-focus-within:text-lime">
+                <label
+                  htmlFor="lastName"
+                  className="block text-gray-dark mb-1 group-focus-within:text-lime"
+                >
                   Last Name
                 </label>
                 <input
+                  id="lastName"
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
@@ -300,10 +308,14 @@ function SignupFlow() {
               </div>
             </div>
             <div className="mb-4 group">
-              <label className="block text-gray-dark mb-1 group-focus-within:text-lime">
+              <label
+                htmlFor="password"
+                className="block text-gray-dark mb-1 group-focus-within:text-lime"
+              >
                 Password
               </label>
               <input
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -311,10 +323,14 @@ function SignupFlow() {
               />
             </div>
             <div className="mb-4 group">
-              <label className="block text-gray-dark mb-1 group-focus-within:text-lime">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-gray-dark mb-1 group-focus-within:text-lime"
+              >
                 Confirm Password
               </label>
               <input
+                id="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
