@@ -276,8 +276,10 @@ function SignupFlow() {
               />
             </div>
             <div className="flex space-x-4 mb-4">
-              <div className="flex-1">
-                <label className="block text-gray-dark mb-1">First Name</label>
+              <div className="flex-1 group">
+                <label className="block text-gray-dark mb-1 group-focus-within:text-lime">
+                  First Name
+                </label>
                 <input
                   type="text"
                   value={firstName}
@@ -285,8 +287,10 @@ function SignupFlow() {
                   className="w-full border border-gray rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-lime"
                 />
               </div>
-              <div className="flex-1">
-                <label className="block text-gray-dark mb-1">Last Name</label>
+              <div className="flex-1 group">
+                <label className="block text-gray-dark mb-1 group-focus-within:text-lime">
+                  Last Name
+                </label>
                 <input
                   type="text"
                   value={lastName}
@@ -295,8 +299,10 @@ function SignupFlow() {
                 />
               </div>
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-dark mb-1">Password</label>
+            <div className="mb-4 group">
+              <label className="block text-gray-dark mb-1 group-focus-within:text-lime">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
@@ -304,8 +310,8 @@ function SignupFlow() {
                 className="w-full border border-gray rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-lime"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-dark mb-1">
+            <div className="mb-4 group">
+              <label className="block text-gray-dark mb-1 group-focus-within:text-lime">
                 Confirm Password
               </label>
               <input
