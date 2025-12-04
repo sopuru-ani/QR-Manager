@@ -2,13 +2,16 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import MainProvider from "./MainProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <MainProvider>
-      <App />
-    </MainProvider>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
+      <MainProvider>
+        <App />
+      </MainProvider>
+    </GoogleOAuthProvider>
   </StrictMode>
 );

@@ -189,7 +189,7 @@ function QRDetailModal({
             <div className="flex items-start gap-2 text-sm w-full">
               <FiExternalLink size={18} className="mt-1" />
               <span className="wrap-break-word truncate max-w-55 sm:max-w-65 md:max-w-82">
-                {`${expressRoute}redirect/${qr?._id}` ||
+                {`https://qr-manager.net/redirect/${qr?._id}` ||
                   "https://yourapp.com/redirect/id"}
               </span>
             </div>

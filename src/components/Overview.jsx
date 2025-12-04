@@ -12,14 +12,19 @@ import { LuQrCode as QrCode } from "react-icons/lu";
 import { useMainContext } from "../useMainContext";
 import ProfileModal from "./ProfileModal.jsx";
 import DeleteAccount from "./DeleteAccount.jsx";
+import AddPassword from "./AddPassword.jsx";
+import ChangePassword from "./ChangePassword.jsx";
 
 function Overview() {
   const { expressRoute, isLight, setIsLight } = useMainContext();
+  const [render, setRender] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [showProfile, setShowProfile] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
+  const [showAddPassword, setShowAddPassword] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const triggerRef = useRef(null);
@@ -51,8 +56,9 @@ function Overview() {
       }
     }
     profile();
+    setRender(false);
     console.log(profileData);
-  }, []);
+  }, [render]);
   return (
     <div className="min-h-screen flex bg-amber-50">
       {/* Sidebar */}
@@ -145,17 +151,28 @@ function Overview() {
             <button className="bg-lime text-white py-1 px-3 rounded-md hover:bg-lime-dark transition border-2 border-lime-500">
               <Link to="/gen-qr">New QR</Link>
             </button>
-            <div
-              ref={triggerRef}
-              className="w-10 h-10 mr-0 bg-lime text-white rounded-full flex items-center justify-center font-bold cursor-pointer"
-              // onClick={() => {
-              //   setShowProfile(true);
-              // }}
-              onClick={() => setShowProfile(!showProfile)}
-            >
-              {profileData?.[0].firstName?.[0] || "N"}
-              {profileData?.[0].lastName?.[0] || "A"}
-            </div>
+            {profileData?.[0].avatar ? (
+              <img
+                ref={triggerRef}
+                onClick={() => setShowProfile(!showProfile)}
+                src={profileData[0].avatar + ""}
+                alt="Profile"
+                className="mx-auto w-10 h-10 rounded-full object-cover shadow"
+              />
+            ) : (
+              <div
+                ref={triggerRef}
+                className="w-10 h-10 mr-0 bg-lime text-white rounded-full flex items-center justify-center font-bold cursor-pointer"
+                // onClick={() => {
+                //   setShowProfile(true);
+                // }}
+                onClick={() => setShowProfile(!showProfile)}
+              >
+                {profileData?.[0].firstName?.[0] || "N"}
+                {profileData?.[0].lastName?.[0] || "A"}
+              </div>
+            )}
+
             <ProfileModal
               show={showProfile}
               onClose={() => setShowProfile(false)}
@@ -164,10 +181,24 @@ function Overview() {
               logout={logout}
               showDeleteAccount={showDeleteAccount}
               setShowDeleteAccount={setShowDeleteAccount}
+              showAddPassword={showAddPassword}
+              setShowAddPassword={setShowAddPassword}
+              showChangePassword={showChangePassword}
+              setShowChangePassword={setShowChangePassword}
             />
             <DeleteAccount
               open={showDeleteAccount}
               onClose={() => setShowDeleteAccount(false)}
+            />
+            <AddPassword
+              show={showAddPassword}
+              setRender={setRender}
+              onClose={() => setShowAddPassword(false)}
+            />
+            <ChangePassword
+              show={showChangePassword}
+              setRender={setRender}
+              onClose={() => setShowChangePassword(false)}
             />
           </div>
         </header>

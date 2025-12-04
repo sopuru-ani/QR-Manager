@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import { useMainContext } from "../useMainContext.jsx";
+import LoadingSpinner from "./LoadingSpinner.jsx";
 
 function Login() {
   const { expressRoute } = useMainContext();
@@ -12,10 +14,63 @@ function Login() {
   const [loginMsg, setLoginMsg] = useState("");
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => googleSignUp(tokenResponse),
+    onError: () => console.log("Login Failed"),
+  });
+  async function googleSignUp(tokenResponse) {
+    setLoading(true);
+    try {
+      const userInfo = await fetch(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`,
+          },
+        }
+      );
+      const userInfoData = await userInfo.json();
+      const response = await fetch(`${expressRoute}googlesignup`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          googleId: userInfoData.sub,
+          email: userInfoData.email,
+          name: userInfoData.name,
+          picture: userInfoData.picture,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setLogin(true);
+        setError(false);
+        setLoginMsg("Google login successful! Redirecting to dashboard...");
+        setLoading(false);
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
+      }
+      if (!response.ok) {
+        setError(true);
+        setLoading(false);
+        setErrorMsg(data.msg || "Something went wrong. try again later");
+      }
+    } catch (error) {
+      setError(true);
+      setLoading(false);
+      setErrorMsg("Server error. Please try again later.");
+    }
+  }
 
   async function loginAuthentication(event) {
     event.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch(`${expressRoute}login`, {
         method: "POST",
@@ -31,6 +86,7 @@ function Login() {
         setLogin(true);
         setLoginMsg("Login successful! Redirecting to dashboard...");
         setError(false);
+        setLoading(false);
         setTimeout(() => {
           navigate("/dashboard");
         }, 1500);
@@ -38,10 +94,12 @@ function Login() {
         // Handle login failure (e.g., show error message)
         console.log("Login failed");
         setError(true);
+        setLoading(false);
         setErrorMsg(data.msg || "Login failed. Please try again.");
       }
     } catch (error) {
       setError(true);
+      setLoading(false);
       setErrorMsg("Server error. Please try again later.");
     }
   }
@@ -110,8 +168,9 @@ function Login() {
             <button
               type="submit"
               className="w-full bg-lime text-white py-2 rounded-md hover:bg-lime-dark transition cursor-pointer"
+              disabled={loading}
             >
-              Login
+              {!loading ? "Login" : <LoadingSpinner value={"Login"} />}
             </button>
           </form>
 
@@ -121,7 +180,13 @@ function Login() {
             <hr className="flex-1 border-gray" />
           </div>
 
-          <button className="w-full flex items-center justify-center border border-gray rounded-md py-2 hover:bg-gray-100 transition cursor-pointer">
+          <button
+            className="w-full flex items-center justify-center border border-gray rounded-md py-2 hover:bg-gray-100 transition cursor-pointer"
+            disabled={loading}
+            onClick={() => {
+              googleLogin();
+            }}
+          >
             <FcGoogle className="mr-2" size={20} />
             Continue with Google
           </button>

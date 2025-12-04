@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import { useMainContext } from "../useMainContext";
+import LoadingSpinner from "./LoadingSpinner";
 
 function GenQRCode() {
   const navigate = useNavigate();
@@ -14,18 +15,22 @@ function GenQRCode() {
   const [errorMsg, setErrorMsg] = useState("");
   const [qrSuccess, setQrSuccess] = useState(false);
   const [qrSuccessMsg, setQrSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   async function generateQRCode(e) {
     e.preventDefault();
+    setLoading(true);
     if (title.trim() === "" || url.trim() === "") {
       setError(true);
       setQrSuccess(false);
       setErrorMsg("Both Title and URL are required.");
+      setLoading(false);
       return;
     }
     if (!isValidUrl(url)) {
       setError(true);
       setQrSuccess(false);
       setErrorMsg("Please enter a valid URL.");
+      setLoading(false);
       return;
     }
 
@@ -42,24 +47,27 @@ function GenQRCode() {
       setQrSuccess(true);
       setError(false);
       setImg(data.qrImageUrl);
+      setLoading(false);
       setQrSuccessMsg("QR Code generated successfully!");
     }
     if (response.status === 401) {
       setError(true);
       setQrSuccess(false);
       setErrorMsg("Unauthorized. Redirecting to login...");
+      setLoading(false);
       navigate("/login");
     }
     if (!response.ok) {
       setError(true);
       setQrSuccess(false);
+      setLoading(false);
       setErrorMsg(data.msg || "Failed to generate QR Code. Please try again.");
     }
   }
   return (
     <>
       <title>Generate QR code</title>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+      <div className="h-[calc(100dvh-88px)] flex items-center justify-center p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-lime scrollbar-track-gray-300 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-thumb-lime-dark">
         <div className="w-full max-w-xl flex flex-col items-center">
           {/* Page Header */}
           <h1 className="text-3xl font-bold text-gray-800 mb-6">
@@ -124,9 +132,14 @@ function GenQRCode() {
               {img === "" && (
                 <button
                   type="submit"
+                  disabled={loading}
                   className="w-full bg-lime-600 text-white font-medium py-2 rounded-md hover:bg-lime-700 transition"
                 >
-                  Generate QR Code
+                  {!loading ? (
+                    "Generate QR Code"
+                  ) : (
+                    <LoadingSpinner value={"Generate QR Code"} />
+                  )}
                 </button>
               )}
               {img !== "" && (

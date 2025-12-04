@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import OTPInput from "./OTPInput";
 import { useMainContext } from "../useMainContext";
+import LoadingSpinner from "./LoadingSpinner";
 
 function SignupFlow() {
   const navigate = useNavigate();
@@ -24,6 +26,51 @@ function SignupFlow() {
   // Timer for resend code
   const [resendTimer, setResendTimer] = useState(60);
   const [expireTimer, setExpireTimer] = useState(600);
+
+  const [loading, setLoading] = useState(false);
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => googleSignUp(tokenResponse),
+    onError: () => console.log("Login Failed"),
+  });
+  async function googleSignUp(tokenResponse) {
+    try {
+      const userInfo = await fetch(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`,
+          },
+        }
+      );
+      const userInfoData = await userInfo.json();
+      const response = await fetch(`${expressRoute}googlesignup`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          googleId: userInfoData.sub,
+          email: userInfoData.email,
+          name: userInfoData.name,
+          picture: userInfoData.picture,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setError("");
+        setSuccess("Google login successful! Redirecting to dashboard...");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
+      }
+      if (!response.ok) {
+        setError(data.msg || "Something went wrong. try again later");
+      }
+    } catch (error) {
+      setError("Server error. Please try again later.");
+    }
+  }
   useEffect(() => {
     if (step !== 2) return;
 
@@ -56,6 +103,7 @@ function SignupFlow() {
 
   async function handleSendEmail() {
     // call /auth/send-code here
+    setLoading(true);
     try {
       const response = await fetch(`${expressRoute}auth/send-code`, {
         method: "POST",
@@ -67,6 +115,7 @@ function SignupFlow() {
       });
       const data = await response.json();
       if (response.ok) {
+        setLoading(false);
         setError("");
         setStep(2);
         setResendTimer(60);
@@ -74,9 +123,11 @@ function SignupFlow() {
         setResend(true);
       }
       if (!response.ok) {
+        setLoading(false);
         setError(data.msg);
       }
     } catch (error) {
+      setLoading(false);
       setError("Server Error. Please try again later");
     }
   }
@@ -85,6 +136,7 @@ function SignupFlow() {
     // call /auth/verify-code here
     if (code.length === 6) {
       try {
+        setLoading(true);
         const response = await fetch(`${expressRoute}auth/verify-code`, {
           method: "POST",
           headers: {
@@ -96,13 +148,16 @@ function SignupFlow() {
         const data = await response.json();
         if (response.ok) {
           setExpireTimer(600);
+          setLoading(true);
           setError("");
           setStep(3);
         }
         if (!response.ok) {
+          setLoading(true);
           setError("code has expired");
         }
       } catch (error) {
+        setLoading(true);
         setError(data.msg);
       }
     } else {
@@ -113,6 +168,7 @@ function SignupFlow() {
   async function handleFinalSignup(event) {
     event.preventDefault();
     try {
+      setLoading(true);
       const response = await fetch(`${expressRoute}signup`, {
         method: "POST",
         headers: {
@@ -133,6 +189,7 @@ function SignupFlow() {
         // setSignup(true);
         // setSignupMsg("Signup successful! Redirecting to dashboard...");
         setSuccess("Signup successful! Redirecting to dashboard...");
+        setLoading(false);
         setError("");
         setTimeout(() => {
           navigate("/dashboard");
@@ -140,10 +197,12 @@ function SignupFlow() {
       } else {
         // Handle login failure (e.g., show error message)
         console.log("Login failed");
+        setLoading(false);
         setError(data.msg);
         // setErrorMsg(data.msg || "Login failed. Please try again.");
       }
     } catch (error) {
+      setLoading(false);
       setError("Server error. Please try again later.");
       // setErrorMsg("Server error. Please try again later.");
     }
@@ -162,7 +221,12 @@ function SignupFlow() {
             </p>
             {error && (
               <div className="bg-red-100 border-l-4 border-red-600 text-red-700 p-3 rounded mb-2 animate-fade-in">
-                <p className="font-normal">{error}</p>
+                <p className="font-medium">{error}</p>
+              </div>
+            )}
+            {success && (
+              <div className="bg-green-100 border-l-4 border-green-600 text-green-700 p-3 rounded mb-2 animate-fade-in">
+                <p className="font-medium">{success}</p>
               </div>
             )}
             <div className="mb-4">
@@ -177,12 +241,12 @@ function SignupFlow() {
             </div>
             <button
               onClick={handleSendEmail}
-              disabled={!email}
+              disabled={!email || loading}
               className={`w-full bg-lime text-white py-2 rounded-md hover:bg-lime-dark transition ${
                 !email ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              Continue
+              {!loading ? "Continue" : <LoadingSpinner value={"Continue"} />}
             </button>
           </>
         )}
@@ -217,10 +281,11 @@ function SignupFlow() {
               <OTPInput length={6} value={code} onChange={setCode} />
             </div>
             <button
+              disabled={loading}
               onClick={handleVerifyCode}
               className="w-full bg-lime text-white py-2 rounded-md hover:bg-lime-dark transition"
             >
-              Verify
+              {!loading ? "Verify" : <LoadingSpinner value={"Verify"} />}
             </button>
             <div className="mt-2 text-sm text-gray-dark text-center">
               {resendTimer > 0 ? (
@@ -228,6 +293,7 @@ function SignupFlow() {
               ) : (
                 <button
                   onClick={() => {
+                    setLoading(false);
                     handleSendEmail();
                   }}
                   className="text-lime hover:underline"
@@ -239,6 +305,7 @@ function SignupFlow() {
             <div className="mt-4 text-center">
               <button
                 onClick={() => {
+                  setLoading(false);
                   setExpireTimer(600);
                   setError("");
                   setStep(1);
@@ -339,9 +406,14 @@ function SignupFlow() {
             </div>
             <button
               onClick={handleFinalSignup}
+              disabled={loading}
               className="w-full bg-lime text-white py-2 rounded-md hover:bg-lime-dark transition"
             >
-              Create Account
+              {!loading ? (
+                "Create Account"
+              ) : (
+                <LoadingSpinner value={"Create Account"} />
+              )}
             </button>
           </>
         )}
@@ -353,7 +425,13 @@ function SignupFlow() {
               <span className="mx-2 text-gray-dark pl-4 pr-4">or</span>
               <hr className="flex-1 border-gray" />
             </div>
-            <button className="w-full flex items-center justify-center border border-gray rounded-md py-2 hover:bg-gray-100 transition cursor-pointer">
+            <button
+              className="w-full flex items-center justify-center border border-gray rounded-md py-2 hover:bg-gray-100 transition cursor-pointer"
+              disabled={loading}
+              onClick={() => {
+                googleLogin();
+              }}
+            >
               <FcGoogle className="mr-2" size={20} />
               Continue with Google
             </button>

@@ -17,11 +17,11 @@ function AppRoutes() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/gen-qr" element={<GenQRCode />} />
         </Route>
         <Route element={<Overview />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/qr-codes" element={<QrList />} />
+          <Route path="/gen-qr" element={<GenQRCode />} />
         </Route>
       </Routes>
     </>

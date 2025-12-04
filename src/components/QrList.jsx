@@ -53,7 +53,7 @@ function QrList() {
         navigate("/login");
       }
       if (!response.ok) {
-        // setFetchedData(data);
+        setFetchedData(data);
         console.log(data.msg || "Failed to fetch QR Codes. Please try again.");
         setLoading(false);
       }
@@ -185,7 +185,7 @@ function QrList() {
                 {/* Destination URL */}
                 <div className="flex items-center gap-2 text-gray text-sm">
                   <FiLink className="text-gray-dark" />
-                  <span className="truncate max-w-[180px]">{`${expressRoute}redirect/${i._id}`}</span>
+                  <span className="truncate max-w-[180px]">{`https://qr-manager.net/redirect/${i._id}`}</span>
                 </div>
 
                 {/* Last Updated */}
