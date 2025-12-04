@@ -67,7 +67,7 @@ function GenQRCode() {
   return (
     <>
       <title>Generate QR code</title>
-      <div className="h-[calc(100dvh-88px)] flex items-center justify-center p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-lime scrollbar-track-gray-300 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-thumb-lime-dark">
+      <div className="mt-2 mb p-6 h-[calc(100dvh-88px)] flex items-center justify-center overflow-y-auto scrollbar-thin scrollbar-thumb-lime scrollbar-track-gray-300 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-thumb-lime-dark">
         <div className="w-full max-w-xl flex flex-col items-center">
           {/* Page Header */}
           <h1 className="text-3xl font-bold text-gray-800 mb-6">

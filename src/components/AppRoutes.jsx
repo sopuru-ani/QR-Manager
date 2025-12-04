@@ -5,6 +5,7 @@ import Overview from "./Overview.jsx";
 import Landing from "./Landing.jsx";
 import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
+import ForgotPassword from "./ForgotPassword.jsx";
 import Dashboard from "./Dashboard.jsx";
 import QrList from "./QrList.jsx";
 import GenQRCode from "./GenQRCode.jsx";
@@ -17,6 +18,7 @@ function AppRoutes() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/reset-password" element={<ForgotPassword />} />
         </Route>
         <Route element={<Overview />}>
           <Route path="/dashboard" element={<Dashboard />} />
