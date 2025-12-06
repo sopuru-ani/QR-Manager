@@ -51,14 +51,14 @@ function ForgotPassword() {
           </p>
 
           {error && (
-            <p className="bg-red-100 text-red-700 p-2 rounded mb-3 text-sm">
-              {error}
-            </p>
+            <div className="bg-red-100 border-l-4 border-red-600 text-red-700 p-3 rounded mb-2 animate-fade-in">
+              <p className="font-medium">{error}</p>
+            </div>
           )}
           {message && (
-            <p className="bg-green-100 text-green-700 p-2 rounded mb-3 text-sm">
-              {message}
-            </p>
+            <div className="bg-green-100 border-l-4 border-green-600 text-green-700 p-3 rounded mb-2 animate-fade-in">
+              <p className="font-medium">{message}</p>
+            </div>
           )}
 
           <form onSubmit={handleSubmit}>
