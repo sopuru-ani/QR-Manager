@@ -10,6 +10,8 @@ import Dashboard from "./Dashboard.jsx";
 import QrList from "./QrList.jsx";
 import GenQRCode from "./GenQRCode.jsx";
 
+import ResetPassword from "./ResetPassword.jsx";
+
 function AppRoutes() {
   return (
     <>
@@ -18,7 +20,8 @@ function AppRoutes() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/reset-password" element={<ForgotPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
         <Route element={<Overview />}>
           <Route path="/dashboard" element={<Dashboard />} />

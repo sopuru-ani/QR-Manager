@@ -173,6 +173,15 @@ function Login() {
               {!loading ? "Login" : <LoadingSpinner value={"Login"} />}
             </button>
           </form>
+          <p className="mt-4 text-center text-gray-dark text-sm">
+            Have you forgotten your password?{" "}
+            <Link
+              to="/forgot-password"
+              className="text-lime hover:underline cursor-pointer"
+            >
+              reset password
+            </Link>
+          </p>
 
           <div className="flex items-center my-4">
             <hr className="flex-1 border-gray" />

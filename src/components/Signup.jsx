@@ -148,16 +148,16 @@ function SignupFlow() {
         const data = await response.json();
         if (response.ok) {
           setExpireTimer(600);
-          setLoading(true);
+          setLoading(false);
           setError("");
           setStep(3);
         }
         if (!response.ok) {
-          setLoading(true);
+          setLoading(false);
           setError("code has expired");
         }
       } catch (error) {
-        setLoading(true);
+        setLoading(false);
         setError(data.msg);
       }
     } else {
