@@ -45,7 +45,7 @@ function Signup() {
                 }, 1500);
             } else {
                 // Handle login failure (e.g., show error message)
-                console.log("Login failed");
+
                 setError(true);
                 setErrorMsg(data.msg || "Login failed. Please try again.");
             }

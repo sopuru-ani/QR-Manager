@@ -15,7 +15,7 @@ function ProfileModal({
 }) {
   const modalRef = useRef(null);
   // const [showDeleteAccount, setShowDeleteAccount] = useState(false);
-  //   console.log(profileData);
+  //
 
   useEffect(() => {
     if (!show) return;

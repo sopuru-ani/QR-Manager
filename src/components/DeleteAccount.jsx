@@ -25,7 +25,6 @@ function DeleteAccount({ open, onClose }) {
       });
       const data = await response.json();
       if (response.status === 401) {
-        console.log(data.msg);
         navigate("/login");
       }
       if (response.ok) {

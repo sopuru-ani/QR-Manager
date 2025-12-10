@@ -39,18 +39,15 @@ function QRDetailModal({
     });
     const resData = await response.json();
     if (response.status === 401) {
-      console.log(resData.msg || "Unauthorized behavior");
       setFormData({ title: qr.title || "", url: qr.url || "" });
       navigate("/login");
     }
     if (response.ok) {
-      console.log(resData.msg || "QR updated successfully");
       setFormData({ title: data.title || "", url: data.url || "" });
       // setSuccess(true);
-      console.log(success);
 
       rerender(true);
-      console.log("good");
+
       // setTimeout(() => {
       //   onClose();
       // }, 3000);
@@ -61,7 +58,6 @@ function QRDetailModal({
       setEditMode(false);
     }
     if (!response.ok) {
-      console.log(resData.msg || "Failed to update QR. Please try again.");
       setFormData({ title: qr.title || "", url: qr.url || "" });
     }
   }
@@ -72,24 +68,20 @@ function QRDetailModal({
     });
     const resData = await response.json();
     if (response.status === 401) {
-      console.log(resData.msg || "Unauthorized behavior");
       setFormData({ title: qr.title || "", url: qr.url || "" });
       setSuccess(false);
       navigate("/login");
     }
     if (response.ok) {
-      console.log(resData.msg || "QR deleted successfully");
       setSuccess(true);
     }
     if (!response.ok) {
-      console.log(resData.msg || "Failed to delete QR. Please try again.");
       setFormData({ title: qr.title || "", url: qr.url || "" });
       setSuccess(false);
     }
   }
   useEffect(() => {
     if (qr) {
-      console.log("hello");
       setFormData({
         title: qr.title || "",
         url: qr.url || "",
@@ -101,7 +93,6 @@ function QRDetailModal({
   if (!open) return null;
 
   const handleSave = async () => {
-    console.log(formData);
     await onSave(qr._id, formData);
   };
 

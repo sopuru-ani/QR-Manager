@@ -11,7 +11,6 @@ function App() {
   async function fetchData() {
     const response = await fetch(expressRoute);
     const data = await response.json();
-    console.log(data);
   }
   fetchData();
   return (

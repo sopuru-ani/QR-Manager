@@ -19,7 +19,10 @@ function Login() {
 
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => googleSignUp(tokenResponse),
-    onError: () => console.log("Login Failed"),
+    onError: () => {
+      setError(true);
+      setErrorMsg("Google Login Failed");
+    },
   });
   async function googleSignUp(tokenResponse) {
     setLoading(true);
@@ -81,7 +84,7 @@ function Login() {
         body: JSON.stringify({ email: email, password: password }),
       });
       const data = await response.json();
-      // console.log(data);
+      //
       if (response.ok) {
         setLogin(true);
         setLoginMsg("Login successful! Redirecting to dashboard...");
@@ -92,7 +95,7 @@ function Login() {
         }, 1500);
       } else {
         // Handle login failure (e.g., show error message)
-        console.log("Login failed");
+
         setError(true);
         setLoading(false);
         setErrorMsg(data.msg || "Login failed. Please try again.");

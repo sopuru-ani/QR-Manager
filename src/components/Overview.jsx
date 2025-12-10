@@ -47,17 +47,14 @@ function Overview() {
       });
       const data = await response.json();
       if (response.status === 401) {
-        console.log(data.msg);
         navigate("/login");
       }
       if (response.ok) {
-        console.log(data);
         setProfileData(data);
       }
     }
     profile();
     setRender(false);
-    console.log(profileData);
   }, [render]);
   return (
     <div className="min-h-screen flex bg-amber-50">

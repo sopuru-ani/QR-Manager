@@ -49,19 +49,18 @@ function QrList() {
         setLoading(false);
       }
       if (response.status === 401) {
-        console.log("Unauthorized");
         navigate("/login");
       }
       if (!response.ok) {
         setFetchedData(data);
-        console.log(data.msg || "Failed to fetch QR Codes. Please try again.");
+
         setLoading(false);
       }
     }
     fetchData();
     setRerender(false);
     // displayData = [...fetchedData];
-    // console.log(displayData);
+    //
 
     // if (search.trim()) {
     //   displayData = displayData.filter((qr) =>
@@ -94,7 +93,7 @@ function QrList() {
         })
     : [];
   //   useEffect(() => {
-  //     console.log(fetchedData);
+  //
   //   }, [fetchedData]);
 
   return (

@@ -30,13 +30,12 @@ function Dashboard() {
       });
       const data = await response.json();
       if (response.ok) {
-        console.log(data);
         setFetchedData(data);
         setLoading(false);
       }
       if (response.status === 401) {
         navigate("/login");
-        // console.log("Unauthorized");
+        //
       }
       if (!response.ok) {
         console.log(

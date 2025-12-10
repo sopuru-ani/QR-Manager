@@ -30,7 +30,9 @@ function SignupFlow() {
   const [loading, setLoading] = useState(false);
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => googleSignUp(tokenResponse),
-    onError: () => console.log("Login Failed"),
+    onError: () => {
+      setError("Google Login Failed");
+    },
   });
   async function googleSignUp(tokenResponse) {
     try {
@@ -196,7 +198,7 @@ function SignupFlow() {
         }, 1500);
       } else {
         // Handle login failure (e.g., show error message)
-        console.log("Login failed");
+
         setLoading(false);
         setError(data.msg);
         // setErrorMsg(data.msg || "Login failed. Please try again.");

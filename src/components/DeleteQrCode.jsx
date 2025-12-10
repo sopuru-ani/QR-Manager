@@ -13,14 +13,12 @@ function DeleteQrCode({ render, rerender, open, qr, onClose }) {
     });
     const data = await response.json();
     if (response.status === 401) {
-      // console.log(data.msg || "unauthorized entry");
+      //
       navigate("/login");
     }
     if (response.ok) {
-      console.log(data.msg || "successfully deleted");
     }
     if (!response.ok) {
-      console.log(data.msg || "Server error. please try again");
     }
 
     // refresh the list
